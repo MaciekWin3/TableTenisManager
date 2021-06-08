@@ -1,0 +1,57 @@
+﻿@page "/players/{playerId:int}"
+
+@inject HttpClient http
+@inject NavigationManager navigationManager
+
+@using Syncfusion.Blazor.Grids;
+@using System.ComponentModel.DataAnnotations;
+
+
+<h3>Player Description</h3>
+
+
+
+@if (player == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <img style="width:300px" src="@player.PicturePath" />
+        </div>
+        <div class="col-sm d-flex align-items-center">
+            <p>@player.Id</p>
+            <p>@player.FirstName</p>
+            <p>@player.Surname</p>
+            <p>@player.DateOfBirth</p>
+            <p>@player.Points</p>
+        </div>
+    </div>
+</div>
+}
+
+
+@code {
+
+    [Parameter]
+    public int PlayerId { get; set; }
+
+    public Player player { get; set; }
+
+
+    protected async override Task OnParametersSetAsync()
+    {
+        player = await http.GetJsonAsync<Player>("api/players/" + PlayerId.ToString());
+    }
+
+    async Task EditPerson()
+    {
+        await http.PutJsonAsync("api/players", player);
+        navigationManager.NavigateTo("players");
+    }
+
+}

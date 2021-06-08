@@ -1,0 +1,9 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="/" Path="F:\Pobrane F\TableTenisApp\TableTenisApp\Client\bin\Debug\net5.0\wwwroot\" />
+  <ContentRoot BasePath="/" Path="F:\Pobrane F\TableTenisApp\TableTenisApp\Client\obj\Debug\net5.0\scopedcss\bundle\" />
+  <ContentRoot BasePath="/" Path="F:\Pobrane F\TableTenisApp\TableTenisApp\Client\wwwroot\" />
+  <ContentRoot BasePath="_content/MudBlazor" Path="C:\Users\Maciek\.nuget\packages\mudblazor\5.0.10\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Radzen.Blazor" Path="C:\Users\Maciek\.nuget\packages\radzen.blazor\3.4.2\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Syncfusion.Blazor" Path="C:\Users\Maciek\.nuget\packages\syncfusion.blazor\19.1.0.67\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Tewr.Blazor.FileReader" Path="C:\Users\Maciek\.nuget\packages\tewr.blazor.filereader\3.0.0.20340\build\..\staticwebassets\" />
+</StaticWebAssets>

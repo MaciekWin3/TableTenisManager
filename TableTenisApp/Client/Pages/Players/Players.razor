@@ -1,0 +1,73 @@
+﻿@page "/players"
+@inject HttpClient http
+
+@using Syncfusion.Blazor.Grids
+@using System.ComponentModel.DataAnnotations;
+
+
+@if (players == null)
+{
+    <p>Loading...</p>
+}
+else if (players.Count == 0)
+{
+    <p>No players to display</p>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Surname</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Country</th>
+                        <th scope="col">Date Of Birth</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var player in players)
+                    {
+                    <tr>
+                        <td>@player.FirstName</td>
+                        <td>@player.Surname</td>
+                        <td>@player.Points</td>
+                        <td>@player.Country</td>
+                        <td>@player.DateOfBirth</td>
+                        <td><button type="button"  class="btn btn-outline-info">Edit</button></td>
+                        <td><button type="button" @onclick="@(() => DeletePlayer(player.Id))" class="btn btn-outline-danger">Delete</button></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>      
+        </div>
+    </div>
+}
+
+
+@code{
+
+    //Player[] players { get; set; }
+    public List<Player> players { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPlayers();
+    }
+
+    async Task LoadPlayers()
+    {
+        players = await http.GetJsonAsync<List<Player>>("api/players");
+        players = players.OrderBy(x => x.Points).ToList();
+    }
+
+    async Task DeletePlayer(int playerId)
+    {
+        await http.DeleteAsync($"api/players/{playerId}");
+        await LoadPlayers();
+    }
+}

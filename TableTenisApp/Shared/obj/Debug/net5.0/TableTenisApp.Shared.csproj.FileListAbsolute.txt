@@ -1,0 +1,15 @@
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\bin\Debug\net5.0\TableTenisApp.Shared.deps.json
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\bin\Debug\net5.0\TableTenisApp.Shared.dll
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\bin\Debug\net5.0\ref\TableTenisApp.Shared.dll
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\bin\Debug\net5.0\TableTenisApp.Shared.pdb
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\TableTenisApp.Shared.csprojAssemblyReference.cache
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\TableTenisApp.Shared.GeneratedMSBuildEditorConfig.editorconfig
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\TableTenisApp.Shared.AssemblyInfoInputs.cache
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\TableTenisApp.Shared.AssemblyInfo.cs
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\TableTenisApp.Shared.csproj.CoreCompileInputs.cache
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\TableTenisApp.Shared.dll
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\ref\TableTenisApp.Shared.dll
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\TableTenisApp.Shared.pdb
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\bin\Debug\net5.0\TableTenisApp.Shared.runtimeconfig.json
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\bin\Debug\net5.0\TableTenisApp.Shared.runtimeconfig.dev.json
+F:\Pobrane F\TableTenisApp\TableTenisApp\Shared\obj\Debug\net5.0\TableTenisApp.Shared.genruntimeconfig.cache

@@ -1,0 +1,113 @@
+﻿@page "/"
+
+@inject HttpClient http
+
+@using System.Dynamic
+@using Syncfusion.Blazor.Charts
+
+<MudText Typo="Typo.h3" Align="Align.Center" Class="">Ping Pong Players</MudText>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <img src="images/logo2.png" alt="logo" />
+        </div>
+        <div class="col-sm d-flex align-items-center">
+            There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form,
+            by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage
+            of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.
+            All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first
+            true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model
+            sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always
+            free from repetition, injected humour, or non-characteristic words etc.There are many variations of passages of Lorem Ipsum available,
+            but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even
+            slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing
+            hidden in the middle of text.
+        </div>
+    </div>
+</div>
+@if (players == null)
+{
+    <p>Loading</p>
+}
+else
+{
+    <SfChart>
+        <ChartPrimaryXAxis ValueType="Syncfusion.Blazor.Charts.ValueType.Category" />
+        <ChartSeriesCollection>
+            <ChartSeries DataSource="@ChartLine" XName="X" YName="Y" Type="ChartSeriesType.Column" Opacity="0.5"
+                         DashArray="5,5" Fill="blue">
+            </ChartSeries>
+        </ChartSeriesCollection>
+    </SfChart>
+}
+<MudDivider DividerType="DividerType.Middle" Class="my-6" />
+<MudText Typo="Typo.h3" Align="Align.Center" Class="">Our Sponsors</MudText>
+<br />
+<MudCarousel Class="pa-4 mr-16" Style="height:200px;" ShowArrows="true" ShowDelimiters="true" AutoCycle="true" TData="object">
+    <MudCarouselItem Transition="transition" Color="@Color.Info">
+        <div class="d-flex" style="height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MicrosoftAzure" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="transition" Color="@Color.Primary">
+        <div class="d-flex" style="height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+    <MudCarouselItem Transition="transition" Color="@Color.Info">
+        <div class="d-flex" style="height:100%">
+            <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.Facebook" Size="@Size.Large" />
+        </div>
+    </MudCarouselItem>
+</MudCarousel>
+<MudDivider DividerType="DividerType.Middle" Class="my-6" />
+
+
+@code{
+    private Transition transition = Transition.Slide;
+    //private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
+
+
+
+    //Player[] players { get; set; }
+    public List<Player> players;
+
+    //public List<string> names { get; set; }
+    public double[] Points { get; set; }
+    public string[] Names { get; set; }
+    public Syncfusion.Blazor.Charts.ChartSeries ChartData { get; set; }
+
+
+    public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
+
+    public List<ExpandoObject> ChartLine { get; set; } = new List<ExpandoObject>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadPlayers();
+
+        ChartLine = Enumerable.Range(0, players.Count).Select((x) =>
+        {
+            dynamic d = new ExpandoObject();
+            if (x == 0)
+            {
+                d.X = players[x].Surname;
+                d.Y = 0;
+            }
+            d.X = players[x].Surname;
+            d.Y = players[x].Points;
+            return d;
+        }).Cast<ExpandoObject>().ToList<ExpandoObject>();
+
+    }
+
+    async Task LoadPlayers()
+    {
+        players = await http.GetJsonAsync<List<Player>>("api/players");
+
+    }
+
+
+}

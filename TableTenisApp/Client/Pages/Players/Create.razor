@@ -1,0 +1,151 @@
+﻿@page "/players/create"
+
+@using System.IO;
+@using Tewr.Blazor.FileReader
+@using TableTenisApp.Client.Auth
+
+@inject HttpClient http
+@inject IFileReaderService fileReader
+@inject ILoginService loginService
+@inject NavigationManager navigationManager
+
+
+<div class="d-flex align-items-center justify-content-center">
+    <div class="p-2 bd-highlight col-example">
+        <div style="max-width: 500px;">
+            <EditForm Model="@newPlayer" OnValidSubmit="@CreatePlayer">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <MudCard Class="pa-4 mr-16">
+                    <MudTextField Label="First name"
+                                  @bind-Value="newPlayer.FirstName" For="@(() => newPlayer.FirstName)" />
+
+                    <MudTextField Label="Surname name"
+                                  @bind-Value="newPlayer.Surname" For="@(() => newPlayer.Surname)" />
+
+                    <MudTextField Label="Email"
+                                  @bind-Value="newPlayer.Email" For="@(() => newPlayer.Email)" />
+
+                    <MudTextField Label="Country"
+                                  @bind-Value="newPlayer.Country" For="@(() => newPlayer.Country)" />
+
+                    <br />
+                    <MudItem xs="12" sm="12">
+                        <MudDatePicker Label="Date" @bind-Date="date" />
+                    </MudItem>
+                    <br />
+                    <MudItem xs="12" sm="12">
+                        <MudNumericField @bind-Value="newPlayer.Points" Label="Points" Variant="Variant.Text" Margin="Margin.Dense" />
+                    </MudItem>
+
+                    <br />
+
+                    <MudItem xs="12" sm="12">
+                        <input id="input-b2" name="input-b2" type="file" class="file btn btn-info" data-show-preview="false" @ref="inputReference" @onchange="async () => await OpenFileAsync()" />
+                    </MudItem>
+
+                    <MudItem xs="12" sm="12">
+                        <div class="row">
+                            <div class="col-4">
+
+                                @if (!string.IsNullOrWhiteSpace(message))
+                                {
+                                    <div class="alert alert-success">
+                                        File has been uploaded
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-4">
+                                @if (imagePath != null)
+                                {
+                                    <img style="width:150px" src="@imagePath" />
+                                }
+                            </div>
+                        </div>
+                    </MudItem>
+                    <br />
+                    <button class="btn btn-block btn-success" @onclick="async () => await CreatePlayer()">Create Player</button>
+                </MudCard>
+
+           
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+<style>
+    #input-b2{
+        width: 100%;
+    }
+</style>
+
+        
+
+
+@code{
+
+    private DisplayPlayerModel newPlayer = new DisplayPlayerModel();
+
+    DateTime? date = DateTime.Today;
+
+    ElementReference inputReference;
+    string message = string.Empty;
+    string imagePath = null;
+
+    string fileName = string.Empty;
+    string type = string.Empty;
+    string size = string.Empty;
+
+    Stream fileStream = null;
+
+    async Task OpenFileAsync()
+    {
+        // Read the files
+        var file = (await fileReader.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
+
+        if (file == null)
+            return;
+
+        // Get the info of that files
+        var fileInfo = await file.ReadFileInfoAsync();
+        fileName = fileInfo.Name;
+
+        using (var ms = await file.CreateMemoryStreamAsync((int)fileInfo.Size))
+        {
+            fileStream = new MemoryStream(ms.ToArray());
+        }
+    }
+
+    async Task CreatePlayer()
+    {
+
+        // Create the content
+        var content = new MultipartFormDataContent();
+        content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+
+
+        string extension = Path.GetExtension(fileName);
+        fileName = newPlayer.Email.ToString();
+
+        content.Add(new StreamContent(fileStream, (int)fileStream.Length), "image", fileName + extension);
+
+        string url = "https://localhost:44396";
+
+        var response = await http.PostAsync($"{url}/api/pictures", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var uploadedFileName = await response.Content.ReadAsStringAsync();
+            imagePath = $"{url}/{uploadedFileName}";
+            message = "User Created";
+            newPlayer.DateOfBirth = (DateTime)date;
+            newPlayer.PicturePath = imagePath;
+            await http.PostJsonAsync("api/players", newPlayer);
+
+        }
+
+    }
+
+
+}
+s
