@@ -235,12 +235,12 @@
       "netstandard.dll": "sha256-zDt6ZaAbtKh1rxzQ7CMtlli234CuRfzZU6Fe9cc2FG4=",
       "System.Private.CoreLib.dll": "sha256-KRDEW\/5qbC0\/9M5IbDGIAM1sKCutWHyq9oLl8WW0c3I=",
       "TableTenisApp.Shared.dll": "sha256-cF5XIeZad3xPs5QzuiDPUbneSbI8IGZSOyKY2uPo9Wg=",
-      "TableTenisApp.Client.dll": "sha256-DTykB2gRkkDHC6g0zhcyh7vLMHtujCvfiVGfYfGBo4k="
+      "TableTenisApp.Client.dll": "sha256-+Rp1JlVW7jueamY0TReYSqYn9qHJlrFDw8LvD7TuB0U="
     },
     "lazyAssembly": null,
     "pdb": {
       "TableTenisApp.Shared.pdb": "sha256-SWBjlkEe06GYxfBiaYbVrLqprQVgGNQxwD+qMu6l580=",
-      "TableTenisApp.Client.pdb": "sha256-XF\/OlH2j9Ca4ytZXkT2fP4VRsQWVQZjklL7AwVsiRdM="
+      "TableTenisApp.Client.pdb": "sha256-ryTFsolTGsLInrDsFLT0PNx6zZF45DZ97jgrJ1t18uc="
     },
     "runtime": {
       "dotnet.timezones.blat": "sha256-\/mwFhTTF4Kca8PG7G6rxaGqCueWH9XbWEIK1Fm8GbFg=",

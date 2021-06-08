@@ -769,3 +769,5 @@ F:\Pobrane F\TableTenisApp\TableTenisApp\Client\obj\Debug\net5.0\RazorDeclaratio
 F:\Pobrane F\TableTenisApp\TableTenisApp\Client\obj\Debug\net5.0\Razor\Shared\Footer.razor.g.cs
 F:\Pobrane F\TableTenisApp\TableTenisApp\Client\obj\Debug\net5.0\RazorDeclaration\Pages\Players\OnePlayer.razor.g.cs
 F:\Pobrane F\TableTenisApp\TableTenisApp\Client\obj\Debug\net5.0\Razor\Pages\Players\OnePlayer.razor.g.cs
+F:\Pobrane F\TableTenisApp\TableTenisApp\Client\obj\Debug\net5.0\RazorDeclaration\Pages\Players\EditPlayerForm.razor.g.cs
+F:\Pobrane F\TableTenisApp\TableTenisApp\Client\obj\Debug\net5.0\Razor\Pages\Players\EditPlayerForm.razor.g.cs

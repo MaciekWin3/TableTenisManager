@@ -117,6 +117,7 @@ using Syncfusion.Blazor;
 #line default
 #line hidden
 #nullable disable
+    [Microsoft.AspNetCore.Components.RouteAttribute("/players/edit/{playerId:int}")]
     public partial class Edit : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -124,6 +125,31 @@ using Syncfusion.Blazor;
         {
         }
         #pragma warning restore 1998
+#nullable restore
+#line 9 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Edit.razor"
+       
+
+    [Parameter] 
+    public int PlayerId { get; set; }
+
+    Player player = new Player();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        player = await http.GetJsonAsync<Player>($"api/players/{PlayerId}");
+    }
+
+    async Task EditPlayer()
+    {
+        await http.PutJsonAsync($"api/players/{PlayerId}", player);
+        uriHelper.NavigateTo("players");
+    }
+
+#line default
+#line hidden
+#nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager uriHelper { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient http { get; set; }
     }
 }
 #pragma warning restore 1591
