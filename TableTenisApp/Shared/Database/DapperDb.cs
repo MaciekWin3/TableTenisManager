@@ -22,8 +22,26 @@ namespace TableTenisApp.Shared.Database
 
         public List<Player> GetAllPlayers()
         {
-            var sql = "Select * from Players";
+            var sql = "Select * from Players order by points asc";
             return db.Query<Player>(sql).ToList();
+        }
+
+        public List<Player> GetTopThreePlayers()
+        {
+            var sql = "Select top 3 * from Players order by points asc";
+            return db.Query<Player>(sql).ToList();
+        }
+
+        public bool DoesEmailExists(string email)
+        {
+            var sql = "select count(1) from players where email=@email";
+            return db.ExecuteScalar<bool>(sql, new { email });
+        }
+
+        public bool DoesPlayerExists(int id)
+        {
+            var sql = "select count(1) from players where id=@id";
+            return db.ExecuteScalar<bool>(sql, new {id });
         }
 
         public Player FindPlayerById(int id)
@@ -63,7 +81,6 @@ namespace TableTenisApp.Shared.Database
             db.Execute(sql, player);
             return player;
         }
-
 
     }
 }

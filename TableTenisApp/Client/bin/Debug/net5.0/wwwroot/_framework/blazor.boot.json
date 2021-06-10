@@ -234,13 +234,13 @@
       "mscorlib.dll": "sha256-pfURHvguun0aGHBikgqj1tcIC9yVwDja+omBjH9K0WU=",
       "netstandard.dll": "sha256-zDt6ZaAbtKh1rxzQ7CMtlli234CuRfzZU6Fe9cc2FG4=",
       "System.Private.CoreLib.dll": "sha256-KRDEW\/5qbC0\/9M5IbDGIAM1sKCutWHyq9oLl8WW0c3I=",
-      "TableTenisApp.Shared.dll": "sha256-cF5XIeZad3xPs5QzuiDPUbneSbI8IGZSOyKY2uPo9Wg=",
-      "TableTenisApp.Client.dll": "sha256-+Rp1JlVW7jueamY0TReYSqYn9qHJlrFDw8LvD7TuB0U="
+      "TableTenisApp.Shared.dll": "sha256-1xFrnSuPxm0Bc9P2Voxpy1r9vxzrPQtJ10YJCOfghGg=",
+      "TableTenisApp.Client.dll": "sha256-dfGzAD3FRVjn37b32O1EfdM7CMLKnxZSMpxUSDdhsoY="
     },
     "lazyAssembly": null,
     "pdb": {
-      "TableTenisApp.Shared.pdb": "sha256-SWBjlkEe06GYxfBiaYbVrLqprQVgGNQxwD+qMu6l580=",
-      "TableTenisApp.Client.pdb": "sha256-ryTFsolTGsLInrDsFLT0PNx6zZF45DZ97jgrJ1t18uc="
+      "TableTenisApp.Shared.pdb": "sha256-HWaa6Z0R25Q8ySuECAh0lzcZzjz5rUi8\/GkUV8BhWF0=",
+      "TableTenisApp.Client.pdb": "sha256-mdSzFkTYNFIvLRCOU8SY4pV2IM4DKJB\/wTJPIk49owc="
     },
     "runtime": {
       "dotnet.timezones.blat": "sha256-\/mwFhTTF4Kca8PG7G6rxaGqCueWH9XbWEIK1Fm8GbFg=",

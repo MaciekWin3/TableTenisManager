@@ -15,6 +15,7 @@ namespace TableTenisApp.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PlayersController : ControllerBase
     {
         public IDapperDb _db;
@@ -26,37 +27,183 @@ namespace TableTenisApp.Server.Controllers
             _environment = environment;
         }
 
+        [AllowAnonymous]
         [HttpGet]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IEnumerable<Player> GetPlayers()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Player))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<List<Player>> GetPlayers()
         {
-            return _db.GetAllPlayers();
+            try
+            {
+                return _db.GetAllPlayers();
+            }
+            catch(Exception e)
+            {
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                }                    
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }        
+        }
+
+        [AllowAnonymous]
+        [HttpGet, Route("chart")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Player))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<List<Player>> GetChartData()
+        {
+            try
+            {
+                return _db.GetTopThreePlayers();
+            }
+            catch (Exception e)
+            {
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                }
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
         }
 
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Player> CreatePlayer(Player player)
         {
-            return _db.CreatePlayer(player);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            try
+            {
+                bool exist = _db.DoesEmailExists(player.Email);
+                if (!exist)
+                {
+                    return _db.CreatePlayer(player);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status409Conflict, "Player with that email already exists"); 
+                }
+
+            }
+            catch (Exception e)
+            {
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+                     
         }
 
         [HttpDelete("{id}")]
-        public void DeletePlayer(int id)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Player))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<Player> DeletePlayer(int id)
         {
-            _db.DeletePlayer(id);
+
+            bool exist = _db.DoesPlayerExists(id);
+
+            if (exist)
+            {
+                try
+                {
+                    _db.DeletePlayer(id);
+                    return Ok("Player deleted");
+                }
+                catch (Exception e)
+                {
+                    while (e.InnerException != null)
+                    {
+                        e = e.InnerException;
+                    }
+
+                    return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                }
+            }
+
+            return NotFound($"Player with this id does not exists: {id}");        
+            
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Player))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Player> EditPlayerItem(Player player)
         {
-            return _db.UpdatePlayer(player);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool exist = _db.DoesPlayerExists(player.Id);
+
+            if (exist)
+            {
+                try
+                {
+                    return _db.UpdatePlayer(player);
+                }
+                catch (Exception e)
+                {
+                    while (e.InnerException != null)
+                    {
+                        e = e.InnerException;
+                    }
+
+                    return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                }
+            }
+
+            return NotFound($"Player with this id does not exists: {player.Id}");
+
         }
 
         [HttpGet("{id}")]
         public ActionResult<Player> GetPlayerById(int id)
         {
-            return _db.FindPlayerById(id);
+            try
+            {
+                bool exists = _db.DoesPlayerExists(id);
+                if (exists)
+                {
+                    return _db.FindPlayerById(id);
+                }
+                else
+                {
+                    return NotFound($"Player with {id} id does not exists");
+                }
+            }
+            catch(Exception e)
+            {
+                while (e.InnerException != null)
+                {
+                    e = e.InnerException;
+                }
+                    
+
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }           
         }
+
+
 
     }
 }

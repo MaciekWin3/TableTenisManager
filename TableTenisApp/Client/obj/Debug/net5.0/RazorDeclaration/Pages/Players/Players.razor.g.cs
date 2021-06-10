@@ -119,13 +119,20 @@ using Syncfusion.Blazor;
 #nullable disable
 #nullable restore
 #line 4 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Players.razor"
-using Syncfusion.Blazor.Grids;
+using System.IO;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
 #line 5 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Players.razor"
+using Syncfusion.Blazor.Grids;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 6 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Players.razor"
 using System.ComponentModel.DataAnnotations;
 
 #line default
@@ -140,7 +147,7 @@ using System.ComponentModel.DataAnnotations;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 52 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Players.razor"
+#line 58 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Players.razor"
       
 
     //Player[] players { get; set; }
@@ -154,18 +161,33 @@ using System.ComponentModel.DataAnnotations;
     async Task LoadPlayers()
     {
         players = await http.GetJsonAsync<List<Player>>("api/players");
-        players = players.OrderBy(x => x.Points).ToList();
     }
 
-    async Task DeletePlayer(int playerId)
+    async Task DeletePlayer(Player player)
     {
-        await http.DeleteAsync($"api/players/{playerId}");
+
+        //int index = player.PicturePath.LastIndexOf('/');
+        //string imgPath = "";
+
+        //if (index != -1)
+        //{
+        //    Console.WriteLine(player.PicturePath.Substring(0, index)); // "My. name. is Bond"
+        //    imgPath = player.PicturePath.Substring(index + 1); // "_James Bond!"
+        //}
+        //string rootPath = @"F:/Pobrane F/TableTenisApp/TableTenisApp/Server/wwwroot/Images/";
+
+        //string path = rootPath + imgPath;
+        //string backslash = @"\";
+        //path = path.Replace('/', backslash[0]);
+        //File.Delete(path);
+        await http.DeleteAsync($"api/players/{player.Id}");
         await LoadPlayers();
     }
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigation { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient http { get; set; }
     }
 }

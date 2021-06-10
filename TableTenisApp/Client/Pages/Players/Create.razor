@@ -10,7 +10,14 @@
 @inject NavigationManager navigationManager
 
 
+<br />
+<br />
+<br />
+<br />
+<br />
 <div class="d-flex align-items-center justify-content-center">
+    <h1 class="text-center">Create New Player</h1>
+    <div class="p-2"></div>
     <div class="p-2 bd-highlight col-example">
         <div style="max-width: 500px;">
             <EditForm Model="@newPlayer" OnValidSubmit="@CreatePlayer">
@@ -66,86 +73,89 @@
                     <br />
                     <button class="btn btn-block btn-success" @onclick="async () => await CreatePlayer()">Create Player</button>
                 </MudCard>
-
-           
             </EditForm>
         </div>
     </div>
 </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
 
-<style>
-    #input-b2{
-        width: 100%;
-    }
-</style>
-
-        
-
-
-@code{
-
-    private DisplayPlayerModel newPlayer = new DisplayPlayerModel();
-
-    DateTime? date = DateTime.Today;
-
-    ElementReference inputReference;
-    string message = string.Empty;
-    string imagePath = null;
-
-    string fileName = string.Empty;
-    string type = string.Empty;
-    string size = string.Empty;
-
-    Stream fileStream = null;
-
-    async Task OpenFileAsync()
-    {
-        // Read the files
-        var file = (await fileReader.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
-
-        if (file == null)
-            return;
-
-        // Get the info of that files
-        var fileInfo = await file.ReadFileInfoAsync();
-        fileName = fileInfo.Name;
-
-        using (var ms = await file.CreateMemoryStreamAsync((int)fileInfo.Size))
-        {
-            fileStream = new MemoryStream(ms.ToArray());
+    <style>
+        #input-b2 {
+            width: 100%;
         }
-    }
-
-    async Task CreatePlayer()
-    {
-
-        // Create the content
-        var content = new MultipartFormDataContent();
-        content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+    </style>
 
 
-        string extension = Path.GetExtension(fileName);
-        fileName = newPlayer.Email.ToString();
 
-        content.Add(new StreamContent(fileStream, (int)fileStream.Length), "image", fileName + extension);
 
-        string url = "https://localhost:44396";
+    @code{
 
-        var response = await http.PostAsync($"{url}/api/pictures", content);
+        private DisplayPlayerModel newPlayer = new DisplayPlayerModel();
 
-        if (response.IsSuccessStatusCode)
+        DateTime? date = DateTime.Today;
+
+        ElementReference inputReference;
+        string message = string.Empty;
+        string imagePath = null;
+
+        string fileName = string.Empty;
+        string type = string.Empty;
+        string size = string.Empty;
+
+        Stream fileStream = null;
+
+        async Task OpenFileAsync()
         {
-            var uploadedFileName = await response.Content.ReadAsStringAsync();
-            imagePath = $"{url}/{uploadedFileName}";
-            message = "User Created";
-            newPlayer.DateOfBirth = (DateTime)date;
-            newPlayer.PicturePath = imagePath;
-            await http.PostJsonAsync("api/players", newPlayer);
+            // Read the files
+            var file = (await fileReader.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
 
+            if (file == null)
+                return;
+
+            // Get the info of that files
+            var fileInfo = await file.ReadFileInfoAsync();
+            fileName = fileInfo.Name;
+
+            using (var ms = await file.CreateMemoryStreamAsync((int)fileInfo.Size))
+            {
+                fileStream = new MemoryStream(ms.ToArray());
+            }
         }
 
+        async Task CreatePlayer()
+        {
+
+            // Create the content
+            var content = new MultipartFormDataContent();
+            content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+
+
+            string extension = Path.GetExtension(fileName);
+            fileName = newPlayer.Email.ToString();
+
+            content.Add(new StreamContent(fileStream, (int)fileStream.Length), "image", fileName + extension);
+
+            string url = "https://localhost:44396";
+
+            var response = await http.PostAsync($"{url}/api/pictures", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var uploadedFileName = await response.Content.ReadAsStringAsync();
+                imagePath = $"{url}/{uploadedFileName}";
+                message = "User Created";
+                newPlayer.DateOfBirth = (DateTime)date;
+                newPlayer.PicturePath = imagePath;
+                await http.PostJsonAsync("api/players", newPlayer);
+                navigationManager.NavigateTo("/players");
+            }
+
+        }
+
+
     }
-
-
-}
-s

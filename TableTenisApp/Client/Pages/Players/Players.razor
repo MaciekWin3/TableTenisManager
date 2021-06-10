@@ -1,13 +1,17 @@
 ﻿@page "/players"
 @inject HttpClient http
 
+@using System.IO 
 @using Syncfusion.Blazor.Grids
 @using System.ComponentModel.DataAnnotations;
+@inject NavigationManager navigation
 
+
+<h3 class="text-center">Players List</h3>
 
 @if (players == null)
 {
-    <p>Loading...</p>
+    <p class="text-center">Loading...</p>
 }
 else if (players.Count == 0)
 {
@@ -25,6 +29,7 @@ else
                         <th scope="col">Points</th>
                         <th scope="col">Country</th>
                         <th scope="col">Date Of Birth</th>
+                        <th scope="col">Info</th>
                         <th scope="col">Edit</th>
                         <th scope="col">Delete</th>
                     </tr>
@@ -37,13 +42,14 @@ else
                         <td>@player.Surname</td>
                         <td>@player.Points</td>
                         <td>@player.Country</td>
-                        <td>@player.DateOfBirth</td>
-                        <td><button type="button"  class="btn btn-outline-info">Edit</button></td>
-                        <td><button type="button" @onclick="@(() => DeletePlayer(player.Id))" class="btn btn-outline-danger">Delete</button></td>
+                        <td>@player.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                        <td><button type="button" @onclick="@(() => navigation.NavigateTo($"players/{player.Id}"))" class="btn btn-outline-info">Info</button></td>
+                        <td><button type="button" @onclick="@(() => navigation.NavigateTo($"players/edit/{player.Id}"))" class="btn btn-outline-warning">Edit</button></td>
+                        <td><button type="button" @onclick="@(() => DeletePlayer(player))" class="btn btn-outline-danger">Delete</button></td>
                     </tr>
                     }
                 </tbody>
-            </table>      
+            </table>
         </div>
     </div>
 }
@@ -62,12 +68,26 @@ else
     async Task LoadPlayers()
     {
         players = await http.GetJsonAsync<List<Player>>("api/players");
-        players = players.OrderBy(x => x.Points).ToList();
     }
 
-    async Task DeletePlayer(int playerId)
+    async Task DeletePlayer(Player player)
     {
-        await http.DeleteAsync($"api/players/{playerId}");
+
+        //int index = player.PicturePath.LastIndexOf('/');
+        //string imgPath = "";
+
+        //if (index != -1)
+        //{
+        //    Console.WriteLine(player.PicturePath.Substring(0, index)); // "My. name. is Bond"
+        //    imgPath = player.PicturePath.Substring(index + 1); // "_James Bond!"
+        //}
+        //string rootPath = @"F:/Pobrane F/TableTenisApp/TableTenisApp/Server/wwwroot/Images/";
+
+        //string path = rootPath + imgPath;
+        //string backslash = @"\";
+        //path = path.Replace('/', backslash[0]);
+        //File.Delete(path);
+        await http.DeleteAsync($"api/players/{player.Id}");
         await LoadPlayers();
     }
 }

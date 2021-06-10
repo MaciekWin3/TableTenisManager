@@ -1,4 +1,14 @@
-﻿<EditForm Model="@Player" OnValidSubmit="@OnValidSubmit">
+﻿@using System.IO;
+@using Tewr.Blazor.FileReader
+@using TableTenisApp.Client.Auth
+
+@inject HttpClient http
+@inject IFileReaderService fileReader
+@inject ILoginService loginService
+@inject NavigationManager navigationManager
+
+
+<EditForm Model="@Player" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="form-group">
         <label>Name:</label>
@@ -14,10 +24,53 @@
             <ValidationMessage For="@(() => Player.Surname)" />
         </div>
     </div>
+    <div class="form-group">
+        <label>Biography:</label>
+        <div>
+            <InputTextArea @bind-Value="@Player.Surname" />
+            <ValidationMessage For="@(() => Player.Surname)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Biography:</label>
+        <div>
+            <InputTextArea @bind-Value="@Player.Surname" />
+            <ValidationMessage For="@(() => Player.Surname)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Biography:</label>
+        <div>
+            <InputTextArea @bind-Value="@Player.Surname" />
+            <ValidationMessage For="@(() => Player.Surname)" />
+        </div>
+    </div>
     <button type="submit" class="btn btn-success">
         @ButtonText
     </button>
+    <MudItem xs="12" sm="12">
+        <input id="input-b2" name="input-b2" type="file" class="file btn btn-info" data-show-preview="false" @ref="inputReference" @onchange="async () => await OpenFileAsync()" />
+    </MudItem>
 
+    <MudItem xs="12" sm="12">
+        <div class="row">
+            <div class="col-4">
+
+                @if (!string.IsNullOrWhiteSpace(message))
+                {
+                    <div class="alert alert-success">
+                        File has been uploaded
+                    </div>
+                }
+            </div>
+            <div class="col-4">
+                @if (imagePath != null)
+                {
+                    <img style="width:150px" src="@imagePath" />
+                }
+            </div>
+        </div>
+    </MudItem>
 </EditForm>
 
 @code {
@@ -25,5 +78,37 @@
     [Parameter] public Player Player { get; set; }
     [Parameter] public string ButtonText { get; set; } = "Save Player";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    DateTime? date = DateTime.Today;
+
+    ElementReference inputReference;
+    string message = string.Empty;
+    string imagePath = null;
+
+    string fileName = string.Empty;
+    string type = string.Empty;
+    string size = string.Empty;
+
+    Stream fileStream = null;
+
+    async Task OpenFileAsync()
+    {
+        // Read the files
+        var file = (await fileReader.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
+
+        if (file == null)
+            return;
+
+        // Get the info of that files
+        var fileInfo = await file.ReadFileInfoAsync();
+        fileName = fileInfo.Name;
+
+        using (var ms = await file.CreateMemoryStreamAsync((int)fileInfo.Size))
+        {
+            fileStream = new MemoryStream(ms.ToArray());
+        }
+    }
+
+
 
 }

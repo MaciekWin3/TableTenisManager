@@ -147,72 +147,73 @@ using TableTenisApp.Client.Auth;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 85 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Create.razor"
-      
+#line 96 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Create.razor"
+          
 
-    private DisplayPlayerModel newPlayer = new DisplayPlayerModel();
+        private DisplayPlayerModel newPlayer = new DisplayPlayerModel();
 
-    DateTime? date = DateTime.Today;
+        DateTime? date = DateTime.Today;
 
-    ElementReference inputReference;
-    string message = string.Empty;
-    string imagePath = null;
+        ElementReference inputReference;
+        string message = string.Empty;
+        string imagePath = null;
 
-    string fileName = string.Empty;
-    string type = string.Empty;
-    string size = string.Empty;
+        string fileName = string.Empty;
+        string type = string.Empty;
+        string size = string.Empty;
 
-    Stream fileStream = null;
+        Stream fileStream = null;
 
-    async Task OpenFileAsync()
-    {
-        // Read the files
-        var file = (await fileReader.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
-
-        if (file == null)
-            return;
-
-        // Get the info of that files
-        var fileInfo = await file.ReadFileInfoAsync();
-        fileName = fileInfo.Name;
-
-        using (var ms = await file.CreateMemoryStreamAsync((int)fileInfo.Size))
+        async Task OpenFileAsync()
         {
-            fileStream = new MemoryStream(ms.ToArray());
-        }
-    }
+            // Read the files
+            var file = (await fileReader.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
 
-    async Task CreatePlayer()
-    {
+            if (file == null)
+                return;
 
-        // Create the content
-        var content = new MultipartFormDataContent();
-        content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+            // Get the info of that files
+            var fileInfo = await file.ReadFileInfoAsync();
+            fileName = fileInfo.Name;
 
-
-        string extension = Path.GetExtension(fileName);
-        fileName = newPlayer.Email.ToString();
-
-        content.Add(new StreamContent(fileStream, (int)fileStream.Length), "image", fileName + extension);
-
-        string url = "https://localhost:44396";
-
-        var response = await http.PostAsync($"{url}/api/pictures", content);
-
-        if (response.IsSuccessStatusCode)
-        {
-            var uploadedFileName = await response.Content.ReadAsStringAsync();
-            imagePath = $"{url}/{uploadedFileName}";
-            message = "User Created";
-            newPlayer.DateOfBirth = (DateTime)date;
-            newPlayer.PicturePath = imagePath;
-            await http.PostJsonAsync("api/players", newPlayer);
-
+            using (var ms = await file.CreateMemoryStreamAsync((int)fileInfo.Size))
+            {
+                fileStream = new MemoryStream(ms.ToArray());
+            }
         }
 
-    }
+        async Task CreatePlayer()
+        {
+
+            // Create the content
+            var content = new MultipartFormDataContent();
+            content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
 
 
+            string extension = Path.GetExtension(fileName);
+            fileName = newPlayer.Email.ToString();
+
+            content.Add(new StreamContent(fileStream, (int)fileStream.Length), "image", fileName + extension);
+
+            string url = "https://localhost:44396";
+
+            var response = await http.PostAsync($"{url}/api/pictures", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var uploadedFileName = await response.Content.ReadAsStringAsync();
+                imagePath = $"{url}/{uploadedFileName}";
+                message = "User Created";
+                newPlayer.DateOfBirth = (DateTime)date;
+                newPlayer.PicturePath = imagePath;
+                await http.PostJsonAsync("api/players", newPlayer);
+                navigationManager.NavigateTo("/players");
+            }
+
+        }
+
+
+    
 
 #line default
 #line hidden

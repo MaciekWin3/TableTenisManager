@@ -1,14 +1,10 @@
 ﻿@page "/players/{playerId:int}"
 
 @inject HttpClient http
-@inject NavigationManager navigationManager
+@inject NavigationManager navigation
 
 @using Syncfusion.Blazor.Grids;
 @using System.ComponentModel.DataAnnotations;
-
-
-<h3>Player Description</h3>
-
 
 
 @if (player == null)
@@ -17,23 +13,252 @@
 }
 else
 {
-    
-<div class="container">
-    <div class="row">
-        <div class="col-sm">
-            <img style="width:300px" src="@player.PicturePath" />
+<br />
+
+<br />
+
+<br />
+
+<br />
+
+<div class="container emp-profile">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-img">
+                    <img src="@player.PicturePath" alt="picture" />
+                    
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="profile-head">
+                    <h2>
+                        @player.FirstName @player.Surname
+                    </h2>
+                    <h6>
+                        Table Tenis Player
+                    </h6>
+                    <MudText Typo="Typo.h4">Points :  @player.Points</MudText>
+                    <MudDivider DividerType="DividerType.Middle" Class="my-6" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-secondary" name="btnAddMore" @onclick="@(() => navigation.NavigateTo($"players/edit/{player.Id}"))">Edit profile</button>
+            </div>
         </div>
-        <div class="col-sm d-flex align-items-center">
-            <p>@player.Id</p>
-            <p>@player.FirstName</p>
-            <p>@player.Surname</p>
-            <p>@player.DateOfBirth</p>
-            <p>@player.Points</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="profile-work">
+                    
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@player.FirstName</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Surname</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@player.Surname</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@player.Email</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Country</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>@player.Country</p>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Experience</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Expert</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Hourly Rate</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>10$/hr</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Total Projects</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>230</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>English Level</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Expert</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Availability</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>6 months</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Your Bio</label><br />
+                                <p>Your detail description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </form>
 </div>
 }
 
+
+<style>
+    
+
+    .emp-profile {
+        padding: 3%;
+        margin-top: 3%;
+        margin-bottom: 3%;
+        border-radius: 0.5rem;
+        background: #fff;
+    }
+
+    .profile-img {
+        text-align: center;
+    }
+
+    .profile-img img {
+        width: 70%;
+        height: 80%;
+    }
+
+    .profile-img .file {
+        position: relative;
+        overflow: hidden;
+        margin-top: -20%;
+        width: 70%;
+        border: none;
+        border-radius: 0;
+        font-size: 15px;
+        background: #212529b8;
+    }
+
+    .profile-img .file input {
+        position: absolute;
+        opacity: 0;
+        right: 0;
+        top: 0;
+    }
+
+    .profile-head h5 {
+        color: #333;
+    }
+
+    .profile-head h6 {
+        color: #0062cc;
+    }
+
+    .profile-edit-btn {
+        border: none;
+        border-radius: 1.5rem;
+        width: 70%;
+        padding: 2%;
+        font-weight: 600;
+        color: #6c757d;
+        cursor: pointer;
+    }
+
+    .proile-rating {
+        font-size: 12px;
+        color: #818182;
+        margin-top: 5%;
+    }
+
+    .proile-rating span {
+        color: #495057;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .profile-head .nav-tabs {
+        margin-bottom: 5%;
+    }
+
+    .profile-head .nav-tabs .nav-link {
+        font-weight: 600;
+        border: none;
+    }
+
+    .profile-head .nav-tabs .nav-link.active {
+        border: none;
+        border-bottom: 2px solid #0062cc;
+    }
+
+    .profile-work {
+        padding: 14%;
+        margin-top: -15%;
+    }
+
+    .profile-work p {
+        font-size: 12px;
+        color: #818182;
+        font-weight: 600;
+        margin-top: 10%;
+    }
+
+    .profile-work a {
+        text-decoration: none;
+        color: #495057;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .profile-work ul {
+        list-style: none;
+    }
+
+    .profile-tab label {
+        font-weight: 600;
+    }
+
+    .profile-tab p {
+        font-weight: 600;
+        color: #0062cc;
+    }
+</style>
 
 @code {
 
@@ -41,6 +266,8 @@ else
     public int PlayerId { get; set; }
 
     public Player player { get; set; }
+
+    bool exist = false;
 
 
     protected async override Task OnParametersSetAsync()
@@ -51,7 +278,7 @@ else
     async Task EditPerson()
     {
         await http.PutJsonAsync("api/players", player);
-        navigationManager.NavigateTo("players");
+        navigation.NavigateTo("players");
     }
 
 }

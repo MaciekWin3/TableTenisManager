@@ -140,13 +140,15 @@ using System.ComponentModel.DataAnnotations;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 38 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\OnePlayer.razor"
+#line 263 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\OnePlayer.razor"
        
 
     [Parameter]
     public int PlayerId { get; set; }
 
     public Player player { get; set; }
+
+    bool exist = false;
 
 
     protected async override Task OnParametersSetAsync()
@@ -157,14 +159,14 @@ using System.ComponentModel.DataAnnotations;
     async Task EditPerson()
     {
         await http.PutJsonAsync("api/players", player);
-        navigationManager.NavigateTo("players");
+        navigation.NavigateTo("players");
     }
 
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigationManager { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigation { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient http { get; set; }
     }
 }

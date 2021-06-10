@@ -26,7 +26,6 @@ namespace TableTenisApp.Client.Pages.Players
         public string Country { get; set; }
         [Required]
         public DateTime DateOfBirth { get; set; }
-        [Required]
         public string PicturePath { get; set; }
         [Required]
         public int Points { get; set; }

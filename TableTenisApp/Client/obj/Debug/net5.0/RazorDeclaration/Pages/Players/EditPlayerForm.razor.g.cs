@@ -117,6 +117,27 @@ using Syncfusion.Blazor;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 1 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\EditPlayerForm.razor"
+using System.IO;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 2 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\EditPlayerForm.razor"
+using Tewr.Blazor.FileReader;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 3 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\EditPlayerForm.razor"
+using TableTenisApp.Client.Auth;
+
+#line default
+#line hidden
+#nullable disable
     public partial class EditPlayerForm : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
@@ -125,16 +146,53 @@ using Syncfusion.Blazor;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 27 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\EditPlayerForm.razor"
+#line 76 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\EditPlayerForm.razor"
        
+
     [Parameter] public Player Player { get; set; }
     [Parameter] public string ButtonText { get; set; } = "Save Player";
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    DateTime? date = DateTime.Today;
+
+    ElementReference inputReference;
+    string message = string.Empty;
+    string imagePath = null;
+
+    string fileName = string.Empty;
+    string type = string.Empty;
+    string size = string.Empty;
+
+    Stream fileStream = null;
+
+    async Task OpenFileAsync()
+    {
+        // Read the files
+        var file = (await fileReader.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
+
+        if (file == null)
+            return;
+
+        // Get the info of that files
+        var fileInfo = await file.ReadFileInfoAsync();
+        fileName = fileInfo.Name;
+
+        using (var ms = await file.CreateMemoryStreamAsync((int)fileInfo.Size))
+        {
+            fileStream = new MemoryStream(ms.ToArray());
+        }
+    }
+
+
 
 
 #line default
 #line hidden
 #nullable disable
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigationManager { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private ILoginService loginService { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IFileReaderService fileReader { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient http { get; set; }
     }
 }
 #pragma warning restore 1591

@@ -9,7 +9,6 @@ namespace TableTenisApp.Shared.Models
     public class Player
     {
         public int Id { get; set; }
-
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public string Email { get; set; }

@@ -117,6 +117,27 @@ using Syncfusion.Blazor;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 5 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Edit.razor"
+using System.IO;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 6 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Edit.razor"
+using Tewr.Blazor.FileReader;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 7 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Edit.razor"
+using TableTenisApp.Client.Auth;
+
+#line default
+#line hidden
+#nullable disable
     [Microsoft.AspNetCore.Components.RouteAttribute("/players/edit/{playerId:int}")]
     public partial class Edit : Microsoft.AspNetCore.Components.ComponentBase
     {
@@ -126,30 +147,91 @@ using Syncfusion.Blazor;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 9 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Edit.razor"
+#line 83 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Players\Edit.razor"
        
 
-    [Parameter] 
+    [Parameter]
     public int PlayerId { get; set; }
 
-    Player player = new Player();
+
+    DateTime? date = DateTime.Today;
+
+    ElementReference inputReference;
+    string message = string.Empty;
+    string imagePath = null;
+
+    string fileName = string.Empty;
+    string type = string.Empty;
+    string size = string.Empty;
+
+    Stream fileStream = null;
+
+    Player Player = new Player();
 
     protected async override Task OnParametersSetAsync()
     {
-        player = await http.GetJsonAsync<Player>($"api/players/{PlayerId}");
+        Player = await http.GetJsonAsync<Player>($"api/players/{PlayerId}");
     }
 
     async Task EditPlayer()
     {
-        await http.PutJsonAsync($"api/players/{PlayerId}", player);
-        uriHelper.NavigateTo("players");
+
+        // Create the content
+        var content = new MultipartFormDataContent();
+        content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
+
+
+        string extension = Path.GetExtension(fileName);
+        fileName = Player.Email.ToString();
+
+        content.Add(new StreamContent(fileStream, (int)fileStream.Length), "image", fileName + extension);
+
+        string url = "https://localhost:44396";
+
+        var response = await http.PostAsync($"{url}/api/pictures", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var uploadedFileName = await response.Content.ReadAsStringAsync();
+            imagePath = $"{url}/{uploadedFileName}";
+            message = "User Created";
+            Player.DateOfBirth = (DateTime)date;
+            Player.PicturePath = imagePath;
+            await http.PutJsonAsync($"api/players/{PlayerId}", Player);
+            navigation.NavigateTo("players");
+
+        }
+
+
+
+    }
+
+    async Task OpenFileAsync()
+    {
+        // Read the files
+        var file = (await fileReader.CreateReference(inputReference).EnumerateFilesAsync()).FirstOrDefault();
+
+        if (file == null)
+            return;
+
+        // Get the info of that files
+        var fileInfo = await file.ReadFileInfoAsync();
+        fileName = fileInfo.Name;
+
+        using (var ms = await file.CreateMemoryStreamAsync((int)fileInfo.Size))
+        {
+            fileStream = new MemoryStream(ms.ToArray());
+        }
     }
 
 #line default
 #line hidden
 #nullable disable
-        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager uriHelper { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigationManager { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private ILoginService loginService { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private IFileReaderService fileReader { get; set; }
         [global::Microsoft.AspNetCore.Components.InjectAttribute] private HttpClient http { get; set; }
+        [global::Microsoft.AspNetCore.Components.InjectAttribute] private NavigationManager navigation { get; set; }
     }
 }
 #pragma warning restore 1591

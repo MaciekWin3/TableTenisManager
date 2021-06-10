@@ -140,7 +140,7 @@ using Syncfusion.Blazor.Charts;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 67 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Index.razor"
+#line 65 "F:\Pobrane F\TableTenisApp\TableTenisApp\Client\Pages\Index.razor"
       
     private Transition transition = Transition.Slide;
     //private int Index = -1; //default value cannot be 0 -> first selectedindex is 0.
@@ -182,7 +182,7 @@ using Syncfusion.Blazor.Charts;
 
     async Task LoadPlayers()
     {
-        players = await http.GetJsonAsync<List<Player>>("api/players");
+        players = await http.GetJsonAsync<List<Player>>("api/players/chart");
 
     }
 
